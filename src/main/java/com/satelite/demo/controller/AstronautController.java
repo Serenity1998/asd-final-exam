@@ -24,8 +24,8 @@ public class AstronautController {
     }
 
     @GetMapping
-    public ResponseEntity<List<AstronautResponseDTO>> getAllAstronauts() {
-        return ResponseEntity.ok(astronautService.getAllAstronauts());
+    public ResponseEntity<List<AstronautResponseDTO>> getAllAstronauts(@RequestParam(required = false) String sort) {
+        return ResponseEntity.ok(astronautService.getAllAstronauts(sort));
     }
 
     @GetMapping("/{id}")

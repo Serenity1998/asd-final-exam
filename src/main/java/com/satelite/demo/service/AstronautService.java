@@ -7,9 +7,11 @@ import com.satelite.demo.repository.AstronautRepository;
 import com.satelite.demo.repository.SatelliteRepository;
 import com.satelite.demo.utils.AstronautNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -30,12 +32,18 @@ public class AstronautService {
         this.satelliteRepository = satelliteRepository;
         this.satelliteService = satelliteService;
     }
+    public List<AstronautResponseDTO> getAllAstronauts(String sort) {
+        List<Astronaut> astronauts = astronautRepository.findAll();
 
-    public List<AstronautResponseDTO> getAllAstronauts() {
-        return astronautRepository.findAll().stream()
+        if ("experienceYears".equalsIgnoreCase(sort)) {
+            astronauts.sort(Comparator.comparingInt(Astronaut::getExperienceYears));
+        }
+
+        return astronauts.stream()
                 .map(AstronautResponseDTO::fromEntity)
                 .collect(Collectors.toList());
     }
+
 
     public AstronautResponseDTO getAstronautById(Long id) {
         Astronaut astronaut = findAstronautEntity(id);
