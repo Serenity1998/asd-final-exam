@@ -5,7 +5,6 @@ This is a backend application built with Spring boot
 
 ## Features
 - RESTful API endpoints
-- 
 
 ## API Endpoints
 
