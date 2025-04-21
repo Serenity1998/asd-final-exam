@@ -28,8 +28,9 @@ This is a backend application built with Spring boot
    <img width="1440" alt="Screenshot 2025-04-21 at 11 42 52" src="https://github.com/user-attachments/assets/c9140c31-221b-447a-84a6-9637212b72ea" />
 
 3. PUT satellities
+   <img width="1440" alt="Screenshot 2025-04-21 at 11 55 52" src="https://github.com/user-attachments/assets/7c8fef8b-dfc4-4cf1-9b33-d20f77b46d53" />
    
-4. GLOBAL error example
+5. GLOBAL error example
   <img width="1440" alt="Screenshot 2025-04-21 at 11 52 36" src="https://github.com/user-attachments/assets/9d24af19-895c-48a5-826f-865247fff514" />
 
   
