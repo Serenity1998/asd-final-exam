@@ -20,12 +20,16 @@ This is a backend application built with Spring boot
   <img width="1440" alt="Screenshot 2025-04-21 at 11 42 30" src="https://github.com/user-attachments/assets/77061d9e-6d28-49bc-9caf-5100e4dbf7c7" />
 
    
-3. Get astronauts
+2. Get astronauts
    a. Without sort
    <img width="1440" alt="Screenshot 2025-04-21 at 11 43 02" src="https://github.com/user-attachments/assets/beada611-4b25-4e27-8851-e4b683196520" />
 
    b. With sort
    <img width="1440" alt="Screenshot 2025-04-21 at 11 42 52" src="https://github.com/user-attachments/assets/c9140c31-221b-447a-84a6-9637212b72ea" />
 
-5. PUT satellities
+3. PUT satellities
+   
+4. GLOBAL error example
+   <img width="1440" alt="Screenshot 2025-04-21 at 11 49 58" src="https://github.com/user-attachments/assets/56070ea4-d678-4c63-b583-f60478f7a5a2" />
+
   
