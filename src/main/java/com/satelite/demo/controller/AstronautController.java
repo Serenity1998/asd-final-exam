@@ -2,7 +2,7 @@ package com.satelite.demo.controller;
 
 import com.satelite.demo.dto.AssignmentDTO;
 import com.satelite.demo.dto.AstronautDTO;
-import com.satelite.demo.model.Astronaut;
+import com.satelite.demo.dto.AstronautResponseDTO;
 import com.satelite.demo.service.AstronautService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,39 +24,37 @@ public class AstronautController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Astronaut>> getAllAstronauts(@RequestParam(required = false) String sort) {
-        return ResponseEntity.ok(astronautService.getAllAstronauts(sort));
+    public ResponseEntity<List<AstronautResponseDTO>> getAllAstronauts() {
+        return ResponseEntity.ok(astronautService.getAllAstronauts());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Astronaut> getAstronautById(@PathVariable Long id) {
+    public ResponseEntity<AstronautResponseDTO> getAstronautById(@PathVariable Long id) {
         return ResponseEntity.ok(astronautService.getAstronautById(id));
     }
 
     @PostMapping
-    public ResponseEntity<Astronaut> createAstronaut(@Valid @RequestBody AstronautDTO astronautDTO) {
+    public ResponseEntity<AstronautResponseDTO> createAstronaut(@Valid @RequestBody AstronautDTO astronautDTO) {
         return new ResponseEntity<>(astronautService.createAstronaut(astronautDTO), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Astronaut> updateAstronaut(@PathVariable Long id,
-                                                     @Valid @RequestBody AstronautDTO astronautDTO) {
+    public ResponseEntity<AstronautResponseDTO> updateAstronaut(@PathVariable Long id,
+                                                                @Valid @RequestBody AstronautDTO astronautDTO) {
         return ResponseEntity.ok(astronautService.updateAstronaut(id, astronautDTO));
     }
 
     @PostMapping("/assign")
-    public ResponseEntity<Void> assignSatelliteToAstronaut(@Valid @RequestBody AssignmentDTO assignmentDTO) {
-        astronautService.assignSatelliteToAstronaut(
+    public ResponseEntity<AstronautResponseDTO> assignSatelliteToAstronaut(@Valid @RequestBody AssignmentDTO assignmentDTO) {
+        return ResponseEntity.ok(astronautService.assignSatelliteToAstronaut(
                 assignmentDTO.getAstronautId(),
-                assignmentDTO.getSatelliteId());
-        return ResponseEntity.ok().build();
+                assignmentDTO.getSatelliteId()));
     }
 
     @PostMapping("/unassign")
-    public ResponseEntity<Void> removeSatelliteFromAstronaut(@Valid @RequestBody AssignmentDTO assignmentDTO) {
-        astronautService.removeSatelliteFromAstronaut(
+    public ResponseEntity<AstronautResponseDTO> removeSatelliteFromAstronaut(@Valid @RequestBody AssignmentDTO assignmentDTO) {
+        return ResponseEntity.ok(astronautService.removeSatelliteFromAstronaut(
                 assignmentDTO.getAstronautId(),
-                assignmentDTO.getSatelliteId());
-        return ResponseEntity.ok().build();
+                assignmentDTO.getSatelliteId()));
     }
 }

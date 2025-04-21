@@ -1,7 +1,6 @@
 package com.satelite.demo.controller;
-
 import com.satelite.demo.dto.SatelliteDTO;
-import com.satelite.demo.model.Satellite;
+import com.satelite.demo.dto.SatelliteResponseDTO;
 import com.satelite.demo.service.SatelliteService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,23 +22,23 @@ public class SatelliteController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Satellite>> getAllSatellites() {
+    public ResponseEntity<List<SatelliteResponseDTO>> getAllSatellites() {
         return ResponseEntity.ok(satelliteService.getAllSatellites());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Satellite> getSatelliteById(@PathVariable Long id) {
+    public ResponseEntity<SatelliteResponseDTO> getSatelliteById(@PathVariable Long id) {
         return ResponseEntity.ok(satelliteService.getSatelliteById(id));
     }
 
     @PostMapping
-    public ResponseEntity<Satellite> createSatellite(@Valid @RequestBody SatelliteDTO satelliteDTO) {
+    public ResponseEntity<SatelliteResponseDTO> createSatellite(@Valid @RequestBody SatelliteDTO satelliteDTO) {
         return new ResponseEntity<>(satelliteService.createSatellite(satelliteDTO), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Satellite> updateSatellite(@PathVariable Long id,
-                                                     @Valid @RequestBody SatelliteDTO satelliteDTO) {
+    public ResponseEntity<SatelliteResponseDTO> updateSatellite(@PathVariable Long id,
+                                                                @Valid @RequestBody SatelliteDTO satelliteDTO) {
         return ResponseEntity.ok(satelliteService.updateSatellite(id, satelliteDTO));
     }
 }

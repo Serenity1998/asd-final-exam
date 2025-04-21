@@ -1,18 +1,15 @@
 package com.satelite.demo.service;
-
 import com.satelite.demo.dto.AstronautDTO;
+import com.satelite.demo.dto.AstronautResponseDTO;
 import com.satelite.demo.model.Astronaut;
 import com.satelite.demo.model.Satellite;
 import com.satelite.demo.repository.AstronautRepository;
 import com.satelite.demo.repository.SatelliteRepository;
 import com.satelite.demo.utils.AstronautNotFoundException;
-import com.satelite.demo.utils.SatelliteNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -20,30 +17,33 @@ import java.util.stream.Collectors;
 
 @Service
 public class AstronautService {
+
     private final AstronautRepository astronautRepository;
     private final SatelliteRepository satelliteRepository;
+    private final SatelliteService satelliteService;
 
     @Autowired
-    public AstronautService(AstronautRepository astronautRepository, SatelliteRepository satelliteRepository) {
+    public AstronautService(AstronautRepository astronautRepository,
+                            SatelliteRepository satelliteRepository,
+                            SatelliteService satelliteService) {
         this.astronautRepository = astronautRepository;
         this.satelliteRepository = satelliteRepository;
+        this.satelliteService = satelliteService;
     }
 
-    public List<Astronaut> getAllAstronauts(String sort) {
-        System.out.println("HERE------------>" + "experienceYears".equalsIgnoreCase(sort));
-        if ("experienceYears".equalsIgnoreCase(sort)) {
-            return astronautRepository.findAll(Sort.by(Sort.Direction.ASC, "experienceYears"));
-        }
-        return astronautRepository.findAll();
+    public List<AstronautResponseDTO> getAllAstronauts() {
+        return astronautRepository.findAll().stream()
+                .map(AstronautResponseDTO::fromEntity)
+                .collect(Collectors.toList());
     }
 
-    public Astronaut getAstronautById(Long id) {
-        return astronautRepository.findById(id)
-                .orElseThrow(() -> new AstronautNotFoundException("Astronaut not found with id: " + id));
+    public AstronautResponseDTO getAstronautById(Long id) {
+        Astronaut astronaut = findAstronautEntity(id);
+        return AstronautResponseDTO.fromEntity(astronaut);
     }
 
     @Transactional
-    public Astronaut createAstronaut(AstronautDTO astronautDTO) {
+    public AstronautResponseDTO createAstronaut(AstronautDTO astronautDTO) {
         Astronaut astronaut = new Astronaut();
         astronaut.setFirstName(astronautDTO.getFirstName());
         astronaut.setLastName(astronautDTO.getLastName());
@@ -52,19 +52,19 @@ public class AstronautService {
         // Handle satellite assignments if provided
         if (astronautDTO.getSatelliteIds() != null && !astronautDTO.getSatelliteIds().isEmpty()) {
             Set<Satellite> satellites = astronautDTO.getSatelliteIds().stream()
-                    .map(satelliteId -> satelliteRepository.findById(satelliteId)
-                            .orElseThrow(() -> new SatelliteNotFoundException("Satellite not found with id: " + satelliteId)))
+                    .map(satelliteId -> satelliteService.findSatelliteEntity(satelliteId))
                     .collect(Collectors.toSet());
 
             satellites.forEach(astronaut::assignSatellite);
         }
 
-        return astronautRepository.save(astronaut);
+        astronaut = astronautRepository.save(astronaut);
+        return AstronautResponseDTO.fromEntity(astronaut);
     }
 
     @Transactional
-    public Astronaut updateAstronaut(Long id, AstronautDTO astronautDTO) {
-        Astronaut astronaut = getAstronautById(id);
+    public AstronautResponseDTO updateAstronaut(Long id, AstronautDTO astronautDTO) {
+        Astronaut astronaut = findAstronautEntity(id);
 
         astronaut.setFirstName(astronautDTO.getFirstName());
         astronaut.setLastName(astronautDTO.getLastName());
@@ -86,40 +86,47 @@ public class AstronautService {
             satellitesToRemove.removeAll(astronautDTO.getSatelliteIds());
 
             // Remove satellites
+            Astronaut finalAstronaut1 = astronaut;
             satellitesToRemove.forEach(satelliteId -> {
-                Satellite satellite = satelliteRepository.findById(satelliteId)
-                        .orElseThrow(() -> new SatelliteNotFoundException("Satellite not found with id: " + satelliteId));
-                astronaut.removeSatellite(satellite);
+                Satellite satellite = satelliteService.findSatelliteEntity(satelliteId);
+                finalAstronaut1.removeSatellite(satellite);
             });
 
             // Add new satellites
+            Astronaut finalAstronaut = astronaut;
             satellitesToAdd.forEach(satelliteId -> {
-                Satellite satellite = satelliteRepository.findById(satelliteId)
-                        .orElseThrow(() -> new SatelliteNotFoundException("Satellite not found with id: " + satelliteId));
-                astronaut.assignSatellite(satellite);
+                Satellite satellite = satelliteService.findSatelliteEntity(satelliteId);
+                finalAstronaut.assignSatellite(satellite);
             });
         }
 
-        return astronautRepository.save(astronaut);
+        astronaut = astronautRepository.save(astronaut);
+        return AstronautResponseDTO.fromEntity(astronaut);
     }
 
     @Transactional
-    public void assignSatelliteToAstronaut(Long astronautId, Long satelliteId) {
-        Astronaut astronaut = getAstronautById(astronautId);
-        Satellite satellite = satelliteRepository.findById(satelliteId)
-                .orElseThrow(() -> new SatelliteNotFoundException("Satellite not found with id: " + satelliteId));
+    public AstronautResponseDTO assignSatelliteToAstronaut(Long astronautId, Long satelliteId) {
+        Astronaut astronaut = findAstronautEntity(astronautId);
+        Satellite satellite = satelliteService.findSatelliteEntity(satelliteId);
 
         astronaut.assignSatellite(satellite);
-        astronautRepository.save(astronaut);
+        astronaut = astronautRepository.save(astronaut);
+        return AstronautResponseDTO.fromEntity(astronaut);
     }
 
     @Transactional
-    public void removeSatelliteFromAstronaut(Long astronautId, Long satelliteId) {
-        Astronaut astronaut = getAstronautById(astronautId);
-        Satellite satellite = satelliteRepository.findById(satelliteId)
-                .orElseThrow(() -> new SatelliteNotFoundException("Satellite not found with id: " + satelliteId));
+    public AstronautResponseDTO removeSatelliteFromAstronaut(Long astronautId, Long satelliteId) {
+        Astronaut astronaut = findAstronautEntity(astronautId);
+        Satellite satellite = satelliteService.findSatelliteEntity(satelliteId);
 
         astronaut.removeSatellite(satellite);
-        astronautRepository.save(astronaut);
+        astronaut = astronautRepository.save(astronaut);
+        return AstronautResponseDTO.fromEntity(astronaut);
+    }
+
+    // Helper method to find the entity
+    public Astronaut findAstronautEntity(Long id) {
+        return astronautRepository.findById(id)
+                .orElseThrow(() -> new AstronautNotFoundException("Astronaut not found with id: " + id));
     }
 }
