@@ -30,6 +30,6 @@ This is a backend application built with Spring boot
 3. PUT satellities
    
 4. GLOBAL error example
-   <img width="1440" alt="Screenshot 2025-04-21 at 11 49 58" src="https://github.com/user-attachments/assets/56070ea4-d678-4c63-b583-f60478f7a5a2" />
+  <img width="1440" alt="Screenshot 2025-04-21 at 11 52 36" src="https://github.com/user-attachments/assets/9d24af19-895c-48a5-826f-865247fff514" />
 
   
