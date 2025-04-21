@@ -7,14 +7,19 @@ public class ErrorResponse {
     private Instant timestamp;
     private int status;
     private String message;
+    private String error;
+    private String path;
 
-    public ErrorResponse(int status, String message) {
-        // Instant.now() method gets the current UTC timestamp for the 2 points
+    // Constructor for initializing timestamp, status, and message
+    public ErrorResponse(int status, String message, String error, String path) {
         this.timestamp = Instant.now();
         this.status = status;
         this.message = message;
+        this.error = error;
+        this.path = path;
     }
 
+    // Getters and Setters
     public Instant getTimestamp() {
         return timestamp;
     }
@@ -37,5 +42,21 @@ public class ErrorResponse {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 }
