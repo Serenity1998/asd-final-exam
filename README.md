@@ -21,16 +21,19 @@ This is a backend application built with Spring boot
 
    
 2. Get astronauts
-   a. Without sort
-   <img width="1440" alt="Screenshot 2025-04-21 at 11 43 02" src="https://github.com/user-attachments/assets/beada611-4b25-4e27-8851-e4b683196520" />
+   a. Without sort after assigned
+   <img width="1427" alt="Screenshot 2025-04-21 at 12 12 47" src="https://github.com/user-attachments/assets/762656e5-4349-4c0d-83b1-e898f3cfe0f9" />
+
 
    b. With sort
    <img width="1440" alt="Screenshot 2025-04-21 at 11 42 52" src="https://github.com/user-attachments/assets/c9140c31-221b-447a-84a6-9637212b72ea" />
 
-3. PUT satellities
-   <img width="1440" alt="Screenshot 2025-04-21 at 11 55 52" src="https://github.com/user-attachments/assets/7c8fef8b-dfc4-4cf1-9b33-d20f77b46d53" />
+4. PUT satellities
+   a. Changed satellite with id=1 also retrieved assigned Astronauts
+   <img width="1440" alt="Screenshot 2025-04-21 at 12 13 10" src="https://github.com/user-attachments/assets/7447a8e0-540b-452a-bcce-a6bd45d54d9e" />
+
    
-5. GLOBAL error example
+6. GLOBAL error example
   <img width="1440" alt="Screenshot 2025-04-21 at 11 52 36" src="https://github.com/user-attachments/assets/9d24af19-895c-48a5-826f-865247fff514" />
 
   
